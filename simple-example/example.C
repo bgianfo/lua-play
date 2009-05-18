@@ -1,25 +1,20 @@
-#include <iostream>
-#include <lua.hpp>
-
-using namespace std;
+#include "lua-play.h"
 
 int main ( int argc, char *argv[] )
 {
-    if ( argc != 2 )
-    {
-        cout << "Usage: example <lua-file>" << endl;
-        return -1;
-    }
+    usage(argc);
 
     /* initialize Lua */
-    lua_State* L = luaL_newstate();
-    luaL_openlibs( L );
+    lua_State* lua = luaL_newstate();
+    luaL_openlibs( lua );
 
-    /* run the script */
-    luaL_dofile( L, argv[1] );
+    //
+    // Read in the lua script specified on the cl & run.
+    // 
+    int s = luaL_dofile( lua, argv[1] );
 
-    /* cleanup Lua */
-    lua_close( L );
-
+    report_errors( lua, s );
+    // Clean up
+    lua_close( lua );
     return 0;
 }
